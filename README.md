@@ -2,6 +2,8 @@
 
 Nền tảng tự học tài chính bằng tiếng Việt, có bản tiếng Anh, hướng quant trader/developer và năng lực nghiên cứu. Repository: https://github.com/Tienkhoaa2908/finance.
 
+**Website:** https://finance-tienkhoaa2908.vercel.app · [Bài P&L](https://finance-tienkhoaa2908.vercel.app/finance/pnl)
+
 ## Hệ thống hiện tại
 
 - 36 bài học trong 9 nhóm: tài chính, toán/xác suất, Python/dữ liệu, nghiên cứu chiến lược, thống kê, stock/FX/crypto, phái sinh, hệ thống giao dịch, danh mục.
