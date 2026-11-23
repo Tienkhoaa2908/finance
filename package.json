@@ -1,0 +1,50 @@
+{
+  "name": "and-i-wonder",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack --hostname 0.0.0.0",
+    "prebuild": "npm run curriculum:build && npm run math:lesson:audit",
+    "build": "next build --webpack",
+    "start": "next start --hostname 0.0.0.0",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test --test-concurrency=2 tests/*.test.ts",
+    "test:e2e": "playwright test",
+    "math:notation:audit": "tsx scripts/audit-math-notation.ts",
+    "math:render:audit": "tsx scripts/audit-rendered-math.ts",
+    "math:lesson:audit": "tsx scripts/audit-lesson-review.ts",
+    "math:review:check": "tsx scripts/compile-deep-review.ts && tsx scripts/check-deep-review.ts && tsx scripts/audit-numeric-lessons.ts",
+    "curriculum:build": "npm run math:review:check && tsx scripts/build-math-curriculum.ts && npm run math:render:audit",
+    "curriculum:docs": "tsx scripts/build-math-docs.ts",
+    "curriculum:audit": "node scripts/build-math-audit.mjs"
+  },
+  "dependencies": {
+    "@fontsource/be-vietnam-pro": "5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/source-serif-4": "^5.3.0",
+    "jose": "6.2.12",
+    "katex": "0.19.0",
+    "lucide-react": "1.53.0",
+    "mongodb": "7.7.0",
+    "motion": "14.0.0",
+    "next": "16.4.3",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-markdown": "10.1.0",
+    "rehype-katex": "7.0.1",
+    "remark-gfm": "4.0.1",
+    "remark-math": "6.0.0"
+  },
+  "overrides": {
+    "katex": "$katex"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0",
+    "@types/katex": "0.16.8",
+    "@types/node": "26.6.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}

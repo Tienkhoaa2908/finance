@@ -1,0 +1,27 @@
+# Mathematics v2 authoring contract
+
+Canonical files: `foundations.ts` (weeks 1–28), `probability-inference.ts` (29–60), `optimization-learning.ts` (61–96), `assessment.ts` (97–105). Each default-exports a `MathAuthorFile` from `../../lib/math-curriculum-types`. Shared schema owned by root. Content authors own only their assigned file plus `docs/math-audit-parts/<same-name>.md`.
+
+Use bilingual original explanations with identical formulas, hypotheses and answers. String.raw template literals avoid LaTeX escapes. Every week has substantive definitions, theorem(s) with full hypotheses, a checkable proof (or honest assumed/sketch status with exact source), worked example, failure case, five *different* scheduled exercises (at least 2 proof/derivation + 1 transfer/counterexample in graduate weeks), full step solutions and pointwise rubrics. Each scheduled session references authored theorem(s) and exercises; it may revisit the same weekly theorem from a different mathematical task. Five 240-minute sessions (week 105: three), default blocks 60/100/50/30. Specific actions refer to actual mathematical objects in that lesson. No generic placeholder prose. Study resources support the self-contained lesson; required reading is its authored text, while linked primary reading is selected reference/verification inside the 60-minute budget if used.
+
+IDs: `m2-wNNN-t1`, `m2-wNNN-e1`, source prefix per author (`f-`, `p-`, `o-`, `a-`). Revision integer 1. Prerequisites are earlier week numbers only. No reference to an untaught theorem except labelled assumed/black box. A/B assessment forms contain different arguments, not numerical substitution; alternate exercises replace the scheduled exercise. Include diagnostic week 1, foundations gate week 16, probability gate 44, inference gate 60, optimization gate 72, dependence gate 84. Root owns final exams weeks 97–105. Cumulative/retest sessions explicitly replace normal work, not extra hours.
+
+Audit assigned legacy weeks in all six `data/lessons-*.json`: report topic, intended/observed level, actual theory/exercise/answer evidence and absent/actual assessment, capabilities, gap, decision. Include session-by-session evidence, not keyword-based scores. Sources must be official free and verified via browsing; record URL, version, precise sections. Do not reuse legacy lab/checkpoint data or modify legacy content. Do not run legacy author scripts. No Git push/deploy, no database access. No further subagents.
+
+Derived files under `data/math-v2` come exclusively from `scripts/build-math-curriculum.ts`; never edit derived files manually. Content source hash and exercise hash isolate changed semantics in browser drafts and progress.
+
+## Daily practice refinement — 10 October 2026
+
+Four canonical *-teaching.ts maps cover every original ID with bilingual application/formula and at least three specific method steps. The builder merges them before hashing. lib/math-practice-plan.ts schedules three distinct prompts per session, including A/B and foundation alternatives, in existing blocks. There are 543 original records and 1,087 retrieval copies (1,630 total), giving 1,569 main-route assignments. Copies are not unseen graduate problems. Practice shows only prompt and a solution disclosure; canonical rubrics and gate rules remain in the syllabus. Previous local drafts remain untouched.
+
+## Current contract — lesson review, 10 October 2026
+
+The preceding refinement describes an earlier snapshot. The current builder schedules four tasks for each of 523 primary daily concepts (2,092 assignments; 2,132 stored exercise records). Only the first five days currently have individually authored companion fixtures; do not describe the remaining shared-scaffold tasks as independently authored problems.
+
+Canonical editorial corrections live in review-amendments.ts. They override original exercise/teaching records in prepareMathPractice before companion generation and hashing. When fixing a result, check the prompt, formula, application, steps, solution, common errors and rubric for conflicting statements. Rebuild generated files; never patch only the generated JSON.
+
+concept-figures.ts explicitly binds a primary concept ID to the analytic model in lib/concept-scenes.ts. New figures need bilingual captions, domains, axes, boundary cases and independently calculated fixtures. Never assign a graph to v2 content from a legacy week index. A plotted example does not certify a general theorem.
+
+lib/solution-paragraphs.ts handles presentation-only paragraph separation and duplicate/filler removal. Such formatting must not invalidate semantic progress across unchanged weeks.
+
+Regenerate with npm run curriculum:build, npm run curriculum:docs, and npm run math:lesson:audit; run relevant tests and the notation audit. See docs/lesson-review-2026-10-10.md and the generated per-day ledger for actual review coverage and outstanding work.
