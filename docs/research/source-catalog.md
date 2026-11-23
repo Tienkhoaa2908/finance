@@ -1,5 +1,7 @@
 # Danh mục nguồn học liệu và dữ liệu — bản khảo sát để duyệt
 
+> Bản khảo sát lịch sử. Quyết định triển khai và trạng thái hiện hành xem [thiết kế Finance](../finance-rebuild.md). Người học đã yêu cầu triển khai toàn hệ thống, viết gọn và tự nhiên; không còn chờ duyệt pilot.
+
 Ngày kiểm tra: 23/11/2026. Phạm vi: nguồn sơ cấp của tác giả, đại học, cơ quan thống kê và nhà cung cấp dữ liệu. Đây là danh mục ứng viên, **chưa phải lộ trình đã chốt hoặc toàn bộ tài liệu đã đọc và thẩm định từng chương**. Chưa tải sách/dataset vào repository. Các nhận xét về thứ tự học là đề xuất thiết kế, không phải chứng nhận của đơn vị xuất bản.
 
 ## Các phát hiện ảnh hưởng trực tiếp đến việc xây hệ thống

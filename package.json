@@ -1,11 +1,11 @@
 {
-  "name": "and-i-wonder",
+  "name": "finance-learning",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --webpack --hostname 0.0.0.0",
     "prebuild": "npm run finance:audit && npm run curriculum:build && npm run math:lesson:audit",
-    "finance:audit": "tsx scripts/audit-finance-content.ts",
+    "finance:audit": "tsx scripts/audit-finance-curriculum.ts",
     "build": "next build --webpack",
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",

@@ -5,7 +5,7 @@ const SESSION_COOKIE = "aiw_session";
 const STATE_COOKIE = "aiw_oauth_state";
 const SESSION_SECONDS = 60 * 60 * 24 * 7;
 const STATE_SECONDS = 60 * 10;
-const DEFAULT_OWNER_LOGIN = "dakiemdarktharr";
+const DEFAULT_OWNER_LOGIN = "Tienkhoaa2908";
 
 export type OwnerSession = {
   id: string;

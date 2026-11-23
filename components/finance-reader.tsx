@@ -1,122 +1,53 @@
 'use client';
-
-import {useEffect, useRef, useState} from 'react';
-import {financePilot} from '@/content/finance/pilot';
-import {MathMarkdown} from './math-markdown';
+import Link from 'next/link';
+import {useEffect,useRef,useState} from 'react';
+import type {FinanceLesson,FinanceExercise} from '@/lib/finance-types';
+import {scheduleReview,type LessonProgress} from '@/lib/finance-progress';
+import {lessonById,lessons} from '@/content/finance';
 import {useLanguage} from './providers';
-import './finance-reader.css';
+import {useFinance} from './finance-state';
+import {FinanceMarkdown as MathMarkdown} from './finance-markdown';
 
-type Step = (typeof financePilot.steps)[number];
-
-function Comprehension({step}: {step: Step}) {
-  const {language} = useLanguage();
-  const vi = language === 'vi';
-  const [draft, setDraft] = useState('');
-  const [revealed, setRevealed] = useState(false);
-  const [ready, setReady] = useState(false);
-  const [storageFailed, setStorageFailed] = useState(false);
-  const storageKey = `finance-draft:${financePilot.id}:${financePilot.revision}:${step.id}`;
-
-  useEffect(() => {
-    try { setDraft(localStorage.getItem(storageKey) || ''); }
-    catch { setStorageFailed(true); }
-    setReady(true);
-  }, [storageKey]);
-
-  function updateDraft(value: string) {
-    setDraft(value);
-    try { localStorage.setItem(storageKey, value); setStorageFailed(false); }
-    catch { setStorageFailed(true); }
-  }
-
-  return <section className="finance-comprehension" aria-labelledby="finance-question-title">
-    <h3 id="finance-question-title">{vi ? 'Dừng lại để tự giải thích' : 'Pause and explain it yourself'}</h3>
-    <MathMarkdown>{step.question[language]}</MathMarkdown>
-    <label htmlFor="finance-draft">{vi ? 'Lập luận của bạn' : 'Your reasoning'}</label>
-    <textarea id="finance-draft" rows={5} value={draft} disabled={!ready}
-      onChange={event => updateDraft(event.target.value)} maxLength={12000}
-      aria-describedby="finance-draft-note"
-      placeholder={vi ? 'Viết cách bạn hiểu, các bước suy luận hoặc điều còn chưa rõ…' : 'Write your understanding, reasoning, or what is still unclear…'}/>
-    <p id="finance-draft-note" role="status" className="finance-storage-note">
-      {storageFailed
-        ? (vi ? 'Trình duyệt không lưu được bản nháp. Hãy sao chép câu trả lời trước khi đổi bước hoặc rời trang.' : 'The browser could not save this draft. Copy your answer before changing steps or leaving.')
-        : (vi ? 'Bản nháp chỉ lưu trên trình duyệt này, không đồng bộ tài khoản. Câu trả lời không được chấm tự động.' : 'Drafts stay in this browser and do not sync to an account. Answers are not automatically graded.')}
-    </p>
-    <button type="button" className="finance-reveal" aria-expanded={revealed}
-      aria-controls="finance-explanation" disabled={!ready || !draft.trim()}
-      onClick={() => setRevealed(value => !value)}>
-      {revealed ? (vi ? 'Ẩn phần giải thích' : 'Hide explanation') : (vi ? 'Đối chiếu với phần giải thích' : 'Compare with the explanation')}
-    </button>
-    {!draft.trim() && <p className="finance-hint">{vi ? 'Ghi một nhận xét hoặc câu hỏi trước khi mở phần giải thích. Bạn vẫn có thể chuyển bước bất cứ lúc nào.' : 'Write an observation or question before opening the explanation. You can still move between steps freely.'}</p>}
-    <div id="finance-explanation" hidden={!revealed} className="finance-explanation">
-      {revealed && <><h4>{vi ? 'Giải thích để đối chiếu' : 'Explanation for comparison'}</h4><MathMarkdown>{step.answer[language]}</MathMarkdown>
-        <p className="finance-hint">{vi ? 'So sánh từng bước với lập luận của bạn. Đọc lời giải chưa đồng nghĩa với tự làm được.' : 'Compare each step with your own reasoning. Reading the answer is not evidence that you can reproduce it independently.'}</p></>}
-    </div>
-  </section>;
+function Exercise({exercise,lessonId}:{exercise:FinanceExercise;lessonId:string}){
+ const {language:l}=useLanguage();const vi=l==='vi';const {progress,update,ready}=useFinance();
+ const [hint,setHint]=useState(false);const [answer,setAnswer]=useState(false);const [check,setCheck]=useState('');
+ const row=progress.lessons[lessonId];const draft=row?.drafts[exercise.id]||'';
+ function edit(value:string){update(p=>({...p,lessons:{...p.lessons,[lessonId]:{...p.lessons[lessonId],step:p.lessons[lessonId]?.step||0,ratings:p.lessons[lessonId]?.ratings||{},attempted:[...new Set([...(p.lessons[lessonId]?.attempted||[]),exercise.id])],drafts:{...p.lessons[lessonId]?.drafts,[exercise.id]:value}}}}));setCheck('');}
+ function rate(value:'again'|'good'){update(p=>{const r=p.lessons[lessonId];return {...p,lessons:{...p.lessons,[lessonId]:{...r,ratings:{...r.ratings,[exercise.id]:value}}}};});}
+ return <section className="fq-exercise">
+  <h3>{vi?'Tự kiểm tra':'Check your understanding'}</h3><MathMarkdown>{exercise.question[l]}</MathMarkdown>
+  <label htmlFor={`answer-${exercise.id}`}>{vi?'Câu trả lời của bạn':'Your answer'}</label>
+  <textarea id={`answer-${exercise.id}`} value={draft} disabled={!ready} onChange={e=>edit(e.target.value)} maxLength={12000} rows={3}/>
+  {!row?.attempted?.includes(exercise.id)&&draft&&<p className="fq-muted">{vi?'Bản nháp trước vẫn còn. Hãy cập nhật câu trả lời cho lượt ôn này trước khi mở lời giải.':'Your previous draft is preserved. Update your answer for this review before opening the solution.'}</p>}<div className="fq-actions"><button onClick={()=>setHint(!hint)} aria-expanded={hint}>{vi?'Gợi ý':'Hint'}</button>
+   <button onClick={()=>setAnswer(!answer)} aria-expanded={answer} disabled={!draft.trim()||!row?.attempted?.includes(exercise.id)}>{vi?'Xem lời giải':'Show solution'}</button>
+   {exercise.numeric&&<button disabled={!draft.trim()} onClick={()=>{const value=Number(draft.trim().replace(',','.'));setCheck(Number.isFinite(value)&&Math.abs(value-exercise.numeric!.expected)<=exercise.numeric!.tolerance?(vi?'Kết quả số đúng. Đối chiếu thêm cách lập luận.':'Correct number. Check your reasoning too.'):(vi?'Chưa khớp. Chỉ nhập một số, kiểm tra đơn vị và cách làm trong gợi ý.':'Not a match. Enter a single number; check units and the hint.'));}}>{vi?'Kiểm tra kết quả số':'Check numeric answer'}</button>}
+  </div>
+  {check&&<p role="status">{check}</p>}{hint&&<div className="fq-callout"><MathMarkdown>{exercise.hint[l]}</MathMarkdown></div>}
+  {answer&&<div className="fq-solution"><h4>{vi?'Lời giải':'Solution'}</h4><MathMarkdown>{exercise.answer[l]}</MathMarkdown><p>{vi?'Sau khi đối chiếu, bạn có tự làm lại được không?':'After comparing, can you solve this independently?'}</p><div className="fq-actions"><button aria-pressed={row?.ratings[exercise.id]==='again'} onClick={()=>rate('again')}>{vi?'Cần ôn lại':'Review again'}</button><button aria-pressed={row?.ratings[exercise.id]==='good'} onClick={()=>rate('good')}>{vi?'Tự làm được':'Can solve it'}</button></div></div>}
+ </section>;
 }
 
-export function FinanceReader() {
-  const {language} = useLanguage();
-  const vi = language === 'vi';
-  const [index, setIndex] = useState(0);
-  const [visited, setVisited] = useState<string[]>([financePilot.steps[0].id]);
-  const heading = useRef<HTMLHeadingElement>(null);
-  const focusAfterNavigation = useRef(false);
-  const step = financePilot.steps[index];
-  const sources = financePilot.sources.filter(source => step.sourceIds.includes(source.id));
-
-  useEffect(() => {
-    if (focusAfterNavigation.current) {
-      heading.current?.focus();
-      focusAfterNavigation.current = false;
-    }
-  }, [index]);
-
-  function goTo(next: number) {
-    if (next < 0 || next >= financePilot.steps.length || next === index) return;
-    focusAfterNavigation.current = true;
-    setIndex(next);
-    setVisited(previous => previous.includes(financePilot.steps[next].id) ? previous : [...previous, financePilot.steps[next].id]);
-  }
-
-  return <main className="finance-reader">
-    <header className="finance-intro">
-      <p className="finance-review-note">{vi ? 'Bài học mẫu — đang chờ bạn đánh giá cách học' : 'Sample lesson — learning design awaiting your review'}</p>
-      <h1>{financePilot.title[language]}</h1>
-      <MathMarkdown>{financePilot.intro[language]}</MathMarkdown>
-    </header>
-    <div className="finance-layout">
-      <aside className="finance-outline">
-        <nav aria-label={vi ? 'Các bước của bài học' : 'Lesson steps'}>
-          <h2>{vi ? 'Đi từng bước' : 'Step by step'}</h2>
-          <ol>{financePilot.steps.map((item, position) => <li key={item.id}>
-            <button type="button" onClick={() => goTo(position)} aria-current={position === index ? 'step' : undefined}>
-              <span className="finance-step-number" aria-hidden="true">{String(position + 1).padStart(2, '0')}</span>
-              <span>{item.title[language]}</span>
-              {visited.includes(item.id) && <span className="finance-visited">{vi ? 'Đã mở' : 'Opened'}</span>}
-            </button>
-          </li>)}</ol>
-        </nav>
-        <p className="finance-progress" role="status">{vi ? `Đã mở ${visited.length}/${financePilot.steps.length} bước trong lần học này. Đây không phải điểm thành thạo.` : `Opened ${visited.length}/${financePilot.steps.length} steps this visit. This is not a mastery score.`}</p>
-      </aside>
-      <article className="finance-step" aria-labelledby="finance-step-title">
-        <p className="finance-position">{vi ? `Bước ${index + 1} trong ${financePilot.steps.length}` : `Step ${index + 1} of ${financePilot.steps.length}`}</p>
-        <h2 id="finance-step-title" ref={heading} tabIndex={-1}>{step.title[language]}</h2>
-        <div className="finance-body"><MathMarkdown>{step.body[language]}</MathMarkdown></div>
-        <section className="finance-sources" aria-labelledby="finance-sources-title">
-          <h3 id="finance-sources-title">{vi ? 'Đọc và kiểm tra nguồn' : 'Read and check the sources'}</h3>
-          <ul>{sources.map(source => <li key={source.id}>
-            <a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}<span className="finance-external-note"> {vi ? '(tab mới)' : '(new tab)'}</span></a>
-            <span>{source.section}</span>
-          </li>)}</ul>
-        </section>
-        <Comprehension key={`${financePilot.revision}:${step.id}`} step={step}/>
-        <nav className="finance-pagination" aria-label={vi ? 'Chuyển bước' : 'Change step'}>
-          <button type="button" onClick={() => goTo(index - 1)} disabled={index === 0}>{vi ? 'Bước trước' : 'Previous step'}</button>
-          <button type="button" className="finance-next" onClick={() => goTo(index + 1)} disabled={index === financePilot.steps.length - 1}>{vi ? 'Bước tiếp theo' : 'Next step'}</button>
-        </nav>
-        {index === financePilot.steps.length - 1 && <p className="finance-ending">{vi ? 'Bạn đã đến cuối bài mẫu. Hãy thử giải thích lại mà không nhìn tài liệu, rồi ghi những chỗ bạn muốn bài học giải thích kỹ hơn.' : 'You have reached the end of the sample. Try explaining it without the material, then note what the lesson should explain more fully.'}</p>}
-      </article>
-    </div>
-  </main>;
+export function FinanceReader({lesson}:{lesson:FinanceLesson}){
+ const {language:l}=useLanguage();const vi=l==='vi';const {progress,update,ready,failed}=useFinance();
+ const row:LessonProgress=progress.lessons[lesson.id]||{step:0,drafts:{},ratings:{}};
+ const index=Math.min(row.step,lesson.sections.length);const section=lesson.sections[index];const title=useRef<HTMLHeadingElement>(null);
+ const [moved,setMoved]=useState(false);const [notice,setNotice]=useState('');
+ useEffect(()=>{if(moved)title.current?.focus();},[index,moved]);
+ const next=lessons[lessons.findIndex(item=>item.id===lesson.id)+1];
+ const questions=lesson.exercises.filter((_,i)=>section?i%lesson.sections.length===index:i>=lesson.sections.length);
+ function go(step:number){setMoved(true);update(p=>({...p,lessons:{...p.lessons,[lesson.id]:{...(p.lessons[lesson.id]||{drafts:{},ratings:{}}),step}}}));}
+ function restart(){update(p=>({...p,lessons:{...p.lessons,[lesson.id]:{...p.lessons[lesson.id],step:0,ratings:{},attempted:[],completed:false}}}));setNotice('');}
+ function complete(){if(row.completed)return;if(!lesson.exercises.every(e=>row.ratings[e.id])){setNotice(vi?'Hãy làm và tự đánh giá các bài tập trước khi kết thúc bài.':'Answer and self-assess every exercise before finishing.');return;}update(p=>({...p,lessons:{...p.lessons,[lesson.id]:scheduleReview({...row,completed:true},lesson.exercises.every(e=>row.ratings[e.id]==='good'))}}));setNotice(vi?'Đã lưu vào lịch ôn. Đây là tự đánh giá, không phải chứng nhận thành thạo.':'Saved to your review schedule. This is self-assessment, not certified mastery.');}
+ return <main className="fq-shell"><Link href="/path" className="fq-back">← {vi?'Lộ trình':'Learning path'}</Link>
+  <header className="fq-lesson-intro"><p className="fq-eyebrow">{vi?'BÀI HỌC':'LESSON'}</p><h1>{lesson.title[l]}</h1>{row.completed&&<button onClick={restart}>{vi?'Bắt đầu lượt ôn mới':'Start a new review'}</button>}<div className="fq-overview"><section><h2>{vi?'Bạn sẽ học':'What you will learn'}</h2><MathMarkdown>{lesson.summary[l]}</MathMarkdown></section><section><h2>{vi?'Để làm gì?':'Why it matters'}</h2><MathMarkdown>{lesson.why[l]}</MathMarkdown></section><section><h2>{vi?'Trong hệ thống giao dịch':'In a trading system'}</h2><MathMarkdown>{lesson.application[l]}</MathMarkdown></section></div>
+  {lesson.prerequisites.length>0&&<p className="fq-prereqs">{vi?'Nên học trước: ':'Prerequisites: '}{lesson.prerequisites.map(id=><Link key={id} href={`/finance/${id}`}>{lessonById(id)?.title[l]||id}</Link>)}</p>}</header>
+  {failed&&<p role="alert" className="fq-warning">{vi?'Trình duyệt không lưu được tiến độ. Xuất bản sao ở trang Ôn tập trước khi rời trang.':'Browser storage is unavailable. Export a backup from Review before leaving.'}</p>}
+  <div className="fq-reader"><aside><nav aria-label={vi?'Mục lục bài học':'Lesson contents'}>{lesson.sections.map((s,i)=><button disabled={!ready} aria-current={index===i?'step':undefined} key={i} onClick={()=>go(i)}><span>{String(i+1).padStart(2,'0')}</span>{s.title[l]}</button>)}<button disabled={!ready} aria-current={!section?'step':undefined} onClick={()=>go(lesson.sections.length)}>{vi?'Tổng kết & tài liệu':'Summary & sources'}</button></nav><p className="fq-muted">{vi?'Bản nháp và tiến độ lưu trên trình duyệt này.':'Drafts and progress stay in this browser.'}</p></aside>
+   <article className="fq-reading"><p className="fq-eyebrow">{vi?'BƯỚC':'STEP'} {index+1}/{lesson.sections.length+1}</p><h2 ref={title} tabIndex={-1}>{section?section.title[l]:(vi?'Tổng kết & tài liệu':'Summary & sources')}</h2>
+    {section?<MathMarkdown>{section.body[l]}</MathMarkdown>:<><MathMarkdown>{lesson.summary[l]}</MathMarkdown><h3>{vi?'Bài tập và tự đánh giá':'Practice and self-assessment'}</h3><ul>{lesson.exercises.map((e,i)=><li key={e.id}><button className="fq-text-button" onClick={()=>go(i%lesson.sections.length)}>{vi?`Bài tập ${i+1}`:`Exercise ${i+1}`}</button> · {row.ratings[e.id]==='good'?(vi?'Tự làm được':'Can solve'):row.ratings[e.id]==='again'?(vi?'Cần ôn':'Review again'):(vi?'Chưa đánh giá':'Not assessed')}</li>)}</ul><h3>{vi?'Đọc thêm và kiểm tra nguồn':'Further reading and sources'}</h3><ul className="fq-sources">{lesson.sources.map((s,i)=><li key={i}><a href={s.url} target="_blank" rel="noreferrer">{s.title} ↗</a><p>{s.section}</p></li>)}</ul><Link className="fq-button" href={`/projects#${lesson.project}`}>{vi?'Áp dụng trong dự án':'Apply in a project'} →</Link></>}
+    {questions.map(e=><Exercise key={e.id+String(row.completed)} exercise={e} lessonId={lesson.id}/>)}
+    <nav className="fq-pagination" aria-label={vi?'Chuyển bước':'Change step'}><button disabled={!ready||index===0} onClick={()=>go(index-1)}>{vi?'Trước':'Previous'}</button>{section?<button disabled={!ready} className="fq-primary" onClick={()=>go(index+1)}>{vi?'Tiếp theo':'Next'} →</button>:<button disabled={!ready||row.completed} className="fq-primary" onClick={complete}>{vi?'Hoàn thành & lên lịch ôn':'Finish & schedule review'}</button>}</nav>
+    {notice&&<p role="status">{notice}</p>}{!section&&next&&<Link className="fq-next-lesson" href={`/finance/${next.id}`}>{vi?'Bài tiếp theo: ':'Next lesson: '}{next.title[l]} →</Link>}
+   </article></div>
+ </main>;
 }

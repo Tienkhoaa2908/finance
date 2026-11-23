@@ -1,33 +1,45 @@
-# Finance learning studio
+# Finance — Quant Learning
 
-A personal learning system for Tienkhoaa2908, being rebuilt toward quantitative research, trading and systems development across equities, crypto and FX.
+Nền tảng tự học tài chính bằng tiếng Việt, có bản tiếng Anh, hướng quant trader/developer và năng lực nghiên cứu. Repository: https://github.com/Tienkhoaa2908/finance.
 
-## Current state
+## Hệ thống hiện tại
 
-The application retains the upstream mathematics curriculum. The finance curriculum and teaching model are in research and design; they are not yet a finished course. The learner has basic mathematics and Python experience and starts finance from the beginning. Detailed definitions, assumptions, derivations, worked examples and meaningful practice take precedence over a fixed completion calendar.
+- 36 bài học trong 9 nhóm: tài chính, toán/xác suất, Python/dữ liệu, nghiên cứu chiến lược, thống kê, stock/FX/crypto, phái sinh, hệ thống giao dịch, danh mục.
+- Mỗi bài có tổng quan, mục đích, ứng dụng; nội dung chia bước với 108 bài tập, gợi ý, lời giải và nguồn đọc theo mục. Tiêu đề gọi đúng chủ đề, văn phong Việt được biên tập trực tiếp.
+- Lộ trình có tiên quyết, tìm kiếm và chuyển VI/EN. Bản nháp, tự đánh giá, lịch ôn và checklist dự án lưu ở trình duyệt; xuất/nhập JSON để sao lưu.
+- Lab tương tác: P&L, lợi suất tích lũy và backtest có chi phí. Sáu dự án có mã Python chạy được với dữ liệu mô phỏng, kèm yêu cầu mở rộng.
+- Thư viện nguồn miễn phí và 5 nguồn dữ liệu có mô tả phạm vi sử dụng. Thư viện toán gốc vẫn là phần bổ sung, không đổi nhãn thành bài tài chính.
 
-Repository: https://github.com/Tienkhoaa2908/finance
+Các bài tập tự luận được người học tự đối chiếu, không chấm bằng AI. Kiểm tra số chỉ xác nhận kết quả trong dung sai, không chấm lập luận. Mã dự án là nền thực hành cần mở rộng, không phải hệ thống giao dịch tiền thật. Giáo trình lõi không thay thế mọi chuyên môn quant nâng cao.
 
-Existing website: https://quant-finance-learning.vercel.app — currently runs the earlier upstream snapshot, not necessarily the latest finance commit. Automatic deployment from this repository is not yet verified.
+## Chạy trên máy
 
-## Local development
+Node.js 24+, npm và Python 3.13+ để chạy dự án thực hành.
 
-Requires Node.js 24 and npm. Run `npm ci`, then `npm run dev`. Validate with `npm run typecheck`, `npm test`, `npm run build`. Read `.env.example` and `docs/backend.md` for optional authentication and MongoDB. Do not reuse upstream credentials.
+~~~sh
+npm ci
+npm run dev
+npm run finance:audit
+npm test
+npm run build
+npm start
+~~~
 
-The inherited authoring pipeline remains in `content/math-v2`, `lib/math-practice-plan.ts` and `scripts/build-math-curriculum.ts`. Historical docs describe the upstream system unless labeled as the finance rebuild.
+Ứng dụng học tài chính hoạt động không cần biến môi trường, database hay đăng nhập. Các API đồng bộ và OAuth kế thừa là tùy chọn, chưa được dùng cho tiến độ tài chính. Nếu cấu hình, dùng .env.example và tài khoản riêng; không dùng dịch vụ của upstream.
 
-## Finance rebuild pilot
+~~~sh
+TEST_BASE_URL=http://localhost:3000 npm run test:e2e
+python public/projects/ledger.py
+~~~
 
-Open `/finance` for the bilingual, step-by-step pilot on cash flows, P&L and returns. It stores answer drafts only in the current browser. Questions are for self-explanation, not automatic grading. The old course remains available while the replacement is being designed.
+Trên PowerShell đặt biến bằng $env:TEST_BASE_URL='http://localhost:3000'. Bộ E2E finance ở tests/e2e; bộ UI toán cũ được giữ riêng ở tests/legacy-e2e để tham khảo. Kiểm thử logic và audit render toán cũ vẫn chạy.
 
-- [Rebuild plan and Vietnamese editorial pipeline](docs/finance-rebuild.md)
-- [Upstream history and architecture audit](docs/research/upstream-audit.md)
-- [Quant competency map](docs/research/quant-competencies.md)
-- [Education research and its limitations](docs/research/pedagogy-evidence.md)
-- [Learning materials and data candidates](docs/research/source-catalog.md)
+## Kiến trúc và nội dung
 
-`npm run finance:audit` checks structure, references, rendering and bilingual formula parity. It cannot certify explanatory depth, proof correctness or learner outcomes. No external NLP model is connected; the current language workflow combines authored editing with deterministic lint checks.
+Next.js App Router, React, TypeScript; KaTeX/Markdown cho nội dung. Schema ở lib/finance-types.ts; nội dung ở content/finance; state ở lib/finance-progress.ts và components/finance-state.tsx. Mỗi thay đổi nội dung phải qua finance:audit: cấu trúc, tiên quyết, công thức song ngữ và render. Đây là kiểm tra kỹ thuật, không chứng nhận đúng khoa học hoặc hiệu quả học.
 
-## Attribution
+Xem [thiết kế và biên tập](docs/finance-rebuild.md), [nghiên cứu nghề nghiệp](docs/research/quant-competencies.md), [bằng chứng sư phạm](docs/research/pedagogy-evidence.md), [danh mục nguồn](docs/research/source-catalog.md) và [audit upstream](docs/research/upstream-audit.md).
 
-See [UPSTREAM.md](UPSTREAM.md) and the [historical README](docs/upstream/README.md). A fresh Git history does not change authorship of imported work.
+## Nguồn gốc
+
+[UPSTREAM.md](UPSTREAM.md) ghi nhận And I Wonder và tác giả gốc; [README nguyên bản](docs/upstream/README.md) giữ ngữ cảnh lịch sử. Lịch sử Git riêng không biến code kế thừa thành sáng tác ban đầu của người nhập.

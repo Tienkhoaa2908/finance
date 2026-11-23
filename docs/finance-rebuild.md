@@ -1,54 +1,41 @@
-# Finance rebuild — kế hoạch và trạng thái
+# Thiết kế hệ thống Finance
 
-Ngày 23/11/2026. Mục tiêu đã xác nhận: quant trader/developer có nền tảng nghiên cứu, toán và tài chính; học stock, crypto, FX. Tài chính từ đầu, toán/Python căn bản nhưng không lược bỏ giải thích. Bài giảng tiếng Việt tự nhiên, có bản tiếng Anh; học theo bước kèm câu hỏi. Tài liệu bắt buộc miễn phí hợp pháp.
+Ngày 23/11/2026. Hướng chính: quant trader/developer có nền toán, tài chính và nghiên cứu; stock, crypto, forex. Người học có toán/Python căn bản, chưa học tài chính. Nguồn bắt buộc miễn phí hợp pháp.
 
-## Trạng thái thật
+## Quyết định mới nhất của người học
 
-Đã khảo sát nguồn, lịch sử và kiến trúc. Đã tạo lịch sử Git riêng có attribution. Đang xây reader và một bài mẫu để đánh giá độ sâu. Chưa hoàn thành giáo trình, pipeline ingest sách, hệ thống ôn tập, bộ dự án hoặc triển khai production mới. Không đổi nhãn 523 bài toán cũ thành 523 bài tài chính.
+Triển khai hệ thống đầy đủ, không dừng ở pilot. Bỏ diễn giải vòng vo; viết tiếng Việt trực tiếp, tự nhiên. Tên bài là chủ đề, ví dụ P&L. Trước nội dung luôn có: học gì, để làm gì, ví dụ trong hệ thống giao dịch. Chia bước ngắn để đọc nhưng không cắt mất giả định, định nghĩa hoặc lập luận cần thiết. Có nút VI/EN.
 
-## Lộ trình năng lực đề xuất
+## Các phần đã xây
 
-Các nhóm dưới đây chưa gắn lịch tuần hoặc tiêu chuẩn đỗ do chưa đo đầu vào và thời gian thực học. Một nhóm có nhiều bài, mỗi bài có nhiều bước. Không yêu cầu đọc hết mọi nhánh nâng cao trước khi thử dự án nhỏ phù hợp.
+36 bài, 108 phần nội dung và 108 bài tập trong 9 nhóm. Nguồn chính xác ở từng bài; sơ đồ tiên quyết được kiểm tra không có chu trình. Mỗi bài tập có gợi ý và lời giải; một số có kiểm tra kết quả số. Không khóa người học ở một bài vì chưa đánh dấu hoàn thành.
 
-| Nhóm | Nội dung và tiền đề | Bằng chứng cần xây |
-|---|---|---|
-| 1. Tài chính từ đầu | Tiền, tài sản, nghĩa vụ, hợp đồng, quyền sở hữu; cash flow, bảng cân đối, P&L, lợi suất; số học và đơn vị | Sổ tiền và tài sản giải thích được từng thay đổi |
-| 2. Giá trị theo thời gian | Lãi đơn/kép, chiết khấu, giá trị hiện tại, dòng tiền, trái phiếu, định giá cơ bản; nối với đại số/giải tích | Tự suy ra công thức và đối chiếu lịch dòng tiền |
-| 3. Công cụ và thị trường | Cổ phiếu/quyền cổ đông; FX spot/forward/swap; crypto spot/perpetual; futures/options; margin, settlement; thuật ngữ giải thích từ đầu | So sánh quyền/nghĩa vụ, dòng tiền và rủi ro của từng sản phẩm |
-| 4. Toán và xác suất | Logic, chứng minh, vector/matrix, đạo hàm/tích phân/tối ưu; biến ngẫu nhiên, điều kiện, kỳ vọng, phương sai, hội tụ | Bài suy diễn có điều kiện, phản ví dụ, mô phỏng kiểm tra trực giác |
-| 5. Lập trình dữ liệu | Python, SQL, Git, môi trường tái lập, test; timestamps, schema, missingness, corporate actions, vintage | Pipeline raw→clean có manifest và bài kiểm tra look-ahead |
-| 6. Suy luận thống kê | Estimation, confidence, dependence, testing, multiple selection, regression, time series, forecasting | Báo cáo phân biệt dự báo/nhân quả, uncertainty và sai lệch chọn mô hình |
-| 7. Nghiên cứu chiến lược | Giả thuyết kinh tế, đọc paper, baseline, trials, splits, negative controls, costs | Tái lập nghiên cứu và kết quả ngoài mẫu, kể cả kết quả âm |
-| 8. Danh mục và quản trị rủi ro | Exposure, covariance, constraints, sizing, leverage, drawdown, tail/liquidity/counterparty risk | Ledger danh mục, stress scenario, lý do giới hạn rủi ro |
-| 9. Định giá và hedging | No-arbitrage, replication, binomial, martingale, stochastic calculus, numerical pricing | Chứng minh trong phạm vi nêu rõ, đối chiếu số và hedge ledger |
-| 10. Microstructure và execution | Bid/ask, order book, order lifecycle, queue, adverse selection, impact, fills; riêng từng venue | Simulator sự kiện và đánh giá độ nhạy với giả định khớp lệnh |
-| 11. Hệ thống giao dịch thử | Connector, trạng thái lệnh, idempotency, reconciliation, monitoring, risk checks, phục hồi, bảo mật | Paper-trading harness và thử lỗi/mất kết nối; không kết nối tiền thật |
-| 12. Chuyên sâu và nghiên cứu độc lập | Chọn theo thị trường, horizon, loại chiến lược; DeFi/HFT/volatility là nhánh cần chốt thêm | Repo tái lập, báo cáo, phản biện và kế hoạch bảo trì |
+Các route chính: / (tổng quan), /path (lộ trình và tìm bài), /finance/[id] (reader), /daily (ôn và sao lưu), /resources (học liệu/dữ liệu), /projects (6 dự án), /lab (3 công cụ). /mathematics và các route bài toán ngày cũ là thư viện bổ sung có nguồn gốc riêng.
 
-Tiên quyết chi tiết phải ở mức khái niệm, không chỉ thứ tự nhóm. Stock/crypto/FX xuất hiện trong bài so sánh từ đầu, nhưng ví dụ không được thay ticker rồi coi như cơ chế giống nhau. Không hứa bao trùm mọi chuyên môn quant hoặc bảo đảm lợi nhuận/nghề nghiệp.
+Mã Python tải trực tiếp từ public/projects. Các chương trình dùng thư viện chuẩn, dữ liệu mô phỏng và assertions. Checklist mô tả phần người học cần xây tiếp; tải mã không tự hoàn thành dự án. Capstone ghép data, tín hiệu, risk, execution, ledger và monitoring trong mô phỏng/paper trading.
 
-## Quy trình biên tập tiếng Việt và NLP
+## Biên tập tiếng Việt và kiểm tra ngôn ngữ
 
-1. Viết bản nội dung chuẩn: định nghĩa, giả thiết, công thức, kết quả số, ví dụ và nguồn theo đoạn.
-2. Biên tập tiếng Việt: thống nhất thuật ngữ; giải thích từ Anh ở lần xuất hiện đầu; câu có chủ thể rõ, trình tự nguyên nhân/lập luận dễ theo; bỏ câu rỗng nhưng không bỏ bước suy luận.
-3. Khóa các thành phần cần bảo toàn khi chỉnh văn: biểu thức toán, dấu bất đẳng thức, lượng từ, điều kiện, đơn vị, số liệu, phủ định, URL và ID nguồn.
-4. Đối chiếu bản Anh cùng ý nghĩa. Kiểm biểu thức máy có thể tìm sai khác hình thức, không chứng minh tương đương ngữ nghĩa.
-5. Lint hỗ trợ phát hiện lỗi cấu trúc và văn bản; người biên tập xử lý cảnh báo trong ngữ cảnh. Không blacklist từ đơn, không tự thay thuật ngữ bằng từ gần nghĩa.
-6. Review nghĩa và độ sâu riêng: mọi khái niệm mới được giải thích hoặc nối tới nền đã học; mỗi bước công thức có lý do; ví dụ có diễn giải, trường hợp thất bại và phạm vi áp dụng.
+Viết nội dung từ khái niệm và tình huống trước, rồi đối chiếu bản Anh. Mỗi đoạn trả lời một câu hỏi cụ thể. Thuật ngữ chuyên ngành được giữ khi hữu ích và giải thích trong ngữ cảnh; không thay bằng ẩn dụ. Đơn vị, điều kiện, phủ định và ký hiệu phải giữ nguyên khi biên tập.
 
-Hiện chưa tích hợp mô hình NLP/LLM bên ngoài để viết lại hoặc chấm bài. Bản mẫu có biên tập và kiểm tra tĩnh; không gọi đó là một model NLP đã vận hành. Nếu thêm model, cần chốt provider, chi phí và dữ liệu gửi đi; output phải là bản nháp có diff và review, không tự xuất bản.
+Bộ xử lý Markdown chỉ nhận công thức được đánh dấu rõ; không tự suy đoán một cặp tiền, ID hoặc câu tiếng Việt là toán. Lint kiểm văn bản rỗng, câu lặp liền nhau, escape lỗi, công thức VI/EN và KaTeX. Nó không tự đánh giá mức tự nhiên của tiếng Việt. Không có mô hình NLP/LLM bên ngoài hoặc chi phí inference ngầm; phần văn phong hiện được biên tập, không gắn nhãn là dịch máy đã qua model.
 
-## Pipeline học liệu cần triển khai sau bài mẫu
+## Sư phạm
 
-Nguồn ứng viên → kiểm truy cập và quyền → đọc đúng mục → bảng mệnh đề/khái niệm → DAG → bài gốc → review chuyên môn + ngôn ngữ → fixture/lab → người học thử → phiên bản xuất bản. Các quyền đọc, tải nội bộ và tái phân phối là ba trường riêng. Nguồn chưa đủ quyền chỉ liên kết ngoài. Các tài liệu miễn phí thiên thực hành cần nguồn bổ trợ chứng minh.
+Tổng quan → khái niệm/giả định → suy ra công thức hoặc cơ chế → ví dụ → câu hỏi → gợi ý/lời giải → tự đối chiếu → ứng dụng/dự án. Độ dài tùy nội dung, không lấy số từ làm chuẩn chất lượng. Bước suy luận cần thiết phải có; phần phụ nằm ở nguồn đọc thêm. Bằng chứng nghiên cứu và giới hạn được giữ ở docs/research/pedagogy-evidence.md.
 
-## Tiêu chí nghiệm thu
+Lịch ôn là heuristic từ tự đánh giá: cần ôn lại sau 1 ngày; tự làm được tăng khoảng ôn đến tối đa 30 ngày. Lượt ôn mới cần cập nhật câu trả lời và đánh giá lại. Hoàn thành không phải điểm thành thạo; bấm nhiều lần không tăng khoảng ôn. Chưa đo hiệu quả trên người học theo thời gian.
 
-- Kiểm máy: ID/nguồn/tiền đề hợp lệ; công thức render; đối chiếu VI/EN; fixtures/lab và UI chạy.
-- Kiểm nội dung: không nhảy lập luận, mỗi công thức đúng điều kiện; lời giải giải thích phương pháp; dữ liệu phù hợp mục tiêu.
-- Kiểm với người học: chỉ ra thuật ngữ còn lạ; tự giải thích lại; tự giải biến thể và nhớ lại sau thời gian. Chưa có phép kiểm này trong repo.
-- Trạng thái đọc, làm có trợ giúp, tự làm, truy hồi, chuyển tình huống phải tách riêng. Không dùng nút “đã mở” làm bằng chứng thành thạo.
+## Tiến độ và dữ liệu
 
-## Những quyết định còn cần trao đổi
+Tiến độ tài chính ở localStorage, phiên bản schema 1. Có bản nháp, đánh giá từng bài tập, lịch ôn, checklist; JSON import được kiểm cấu trúc/kích thước. Có nhận cập nhật từ tab khác và đọc lại trước khi ghi; đồng thời sửa cùng trường vẫn theo bản ghi cuối. Khi storage lỗi, giữ state phiên làm việc và hiện cách xuất bản sao. Không tự đồng bộ cloud hoặc hứa giữ dữ liệu nếu trình duyệt xóa storage.
 
-Độ dài mỗi bước sau khi học mẫu; có muốn bắt buộc trả lời trước khi chuyển bước; ưu tiên thị trường/horizon; thời lượng thực học; phương án phản hồi và NLP model nếu cần. Lựa chọn học từng bước không mặc nhiên cấp quyền khóa bài, mua data hoặc triển khai giao dịch tiền thật.
+Nguồn dữ liệu ở content/finance/datasets.ts: French, ALFRED, ECB, SEC EDGAR, Binance public data. Đây là liên kết/định hướng sử dụng; không lưu toàn bộ sách hoặc dataset trong repo. Truy cập miễn phí khác quyền phân phối. Dữ liệu tổng hợp/tham chiếu không dùng như giá khớp; vintage và thời điểm biết dữ liệu là một phần bài học.
+
+## Phạm vi nâng cao
+
+Giáo trình lõi kết nối các năng lực để làm dự án. Các chuyên môn như chứng minh giải tích ngẫu nhiên, định giá nhiều chiều, HFT và DeFi chuyên sâu cần tiếp tục đọc tài liệu chuyên ngành và làm nghiên cứu riêng. Thư viện toán kế thừa hỗ trợ mở rộng nền tảng; không tuyên bố một bài nhập môn thay thế cả môn học hoặc bảo đảm năng lực nghề nghiệp.
+
+## Git và triển khai
+
+Chỉ dùng Tienkhoaa2908/finance. Main đã có lịch sử riêng từ da93ea8; attribution trong UPSTREAM.md. Không merge lịch sử gốc trở lại và không push repo upstream. Deployment dùng CLI máy dưới đúng tài khoản; không dùng plugin tài khoản khác. Site finance không cần MongoDB/OAuth để học; cấu hình dịch vụ bổ sung là việc riêng.

@@ -1,0 +1,6 @@
+artifacts
+test-results
+playwright-report
+tests/legacy-e2e
+.env*
+*.log

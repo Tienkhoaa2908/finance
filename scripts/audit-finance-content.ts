@@ -1,7 +1,5 @@
 /** Editorial assistance only: structure/rendering checks do not validate truth,
  * translation quality, instructional depth, proof correctness, or mastery. */
-import path from 'node:path';
-import {fileURLToPath} from 'node:url';
 import {unified} from 'unified';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
@@ -17,7 +15,7 @@ const record = (value:unknown):value is RecordValue =>
   value !== null && typeof value === 'object' && !Array.isArray(value);
 const nonempty = (value:unknown):value is string => typeof value === 'string' && !!value.trim();
 
-export function auditFinanceLesson(lesson:unknown):FinanceAudit {
+export function auditFinanceLesson(lesson:unknown,{normalizeNotation=true}:{normalizeNotation?:boolean}={}):FinanceAudit {
   const errors:string[] = [], warnings:string[] = [];
   if (!record(lesson)) return {errors:['lesson: expected an object'],warnings};
 
@@ -40,7 +38,7 @@ export function auditFinanceLesson(lesson:unknown):FinanceAudit {
       if (node.type === 'text' && node.value) prose.push(node.value);
       node.children?.forEach(visit);
     }
-    try { visit(parser.parse(normalizeMathNotation(value)) as MarkdownNode); }
+    try { visit(parser.parse(normalizeNotation?normalizeMathNotation(value):value) as MarkdownNode); }
     catch (error) { errors.push(`${location}: Markdown parse failed: ${String(error)}`); }
     const plain = prose.join(' ');
     if (/\\[nr](?=\s|[A-ZÀ-Ỹ]|$)/u.test(plain)) {
@@ -108,15 +106,4 @@ export function auditFinanceLesson(lesson:unknown):FinanceAudit {
     }
   });
   return {errors,warnings};
-}
-
-async function main() {
-  const {financePilot} = await import('../content/finance/pilot');
-  const result = auditFinanceLesson(financePilot);
-  console.log(JSON.stringify({lesson:financePilot.id,errors:result.errors.length,warnings:result.warnings.length,
-    scope:'Editorial structure, bilingual formula parity and rendering only; no semantic or mastery validation.'}));
-  if (result.errors.length) process.exitCode = 1;
-}
-if (process.argv[1] && path.resolve(process.argv[1]).toLowerCase() === fileURLToPath(import.meta.url).toLowerCase()) {
-  main().catch(()=>{ console.error('Finance content audit could not load the lesson.'); process.exitCode=1; });
 }

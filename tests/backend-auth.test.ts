@@ -14,8 +14,8 @@ const secret = "test-only-secret-that-is-at-least-32-bytes-long";
 before(() => {
   process.env.AUTH_SECRET = secret;
   process.env.APP_URL = "https://quant.example";
-  process.env.OWNER_GITHUB_LOGIN = "dakiemdarktharr";
-  process.env.OWNER_GITHUB_ID = "174160458";
+  process.env.OWNER_GITHUB_LOGIN = "Tienkhoaa2908";
+  process.env.OWNER_GITHUB_ID = "236086801";
 });
 
 after(() => {
@@ -26,11 +26,11 @@ after(() => {
 });
 
 async function sessionCookie({
-  id = "174160458",
-  login = "dakiemdarktharr",
+  id = "236086801",
+  login = "Tienkhoaa2908",
   expires = "1h",
 }: { id?: string; login?: string; expires?: string } = {}): Promise<string> {
-  const token = await new SignJWT({ login, avatarUrl: "https://avatars.githubusercontent.com/u/174160458?v=4" })
+  const token = await new SignJWT({ login, avatarUrl: "https://avatars.githubusercontent.com/u/236086801?v=4" })
     .setProtectedHeader({ alg: "HS256", typ: "JWT" })
     .setSubject(id)
     .setIssuer("https://quant.example")
@@ -46,9 +46,9 @@ test("a valid signed owner session resolves only to the configured GitHub ID", a
     headers: { cookie: await sessionCookie() },
   }));
   assert.deepEqual(owner, {
-    id: "174160458",
-    login: "dakiemdarktharr",
-    avatarUrl: "https://avatars.githubusercontent.com/u/174160458?v=4",
+    id: "236086801",
+    login: "Tienkhoaa2908",
+    avatarUrl: "https://avatars.githubusercontent.com/u/236086801?v=4",
   });
 });
 
@@ -60,7 +60,7 @@ test("tampered, expired, and non-owner cookies are rejected", async () => {
   const wrongLogin = await getOwnerSession(new Request("https://quant.example", {
     headers: { cookie: await sessionCookie({ login: "someone-else" }) },
   }));
-  process.env.OWNER_GITHUB_ID = "174160458";
+  process.env.OWNER_GITHUB_ID = "236086801";
   const expired = await getOwnerSession(new Request("https://quant.example", {
     headers: { cookie: await sessionCookie({ expires: "-1s" }) },
   }));
@@ -103,9 +103,9 @@ test("GitHub OAuth binds the callback to its state cookie and keeps the access t
     assert.equal(url, "https://api.github.com/user");
     assert.equal(new Headers(init?.headers).get("authorization"), "Bearer private-github-access-token");
     return Response.json({
-      id: 174160458,
-      login: "dakiemdarktharr",
-      avatar_url: "https://avatars.githubusercontent.com/u/174160458?v=4",
+      id: 236086801,
+      login: "Tienkhoaa2908",
+      avatar_url: "https://avatars.githubusercontent.com/u/236086801?v=4",
     });
   }) as typeof fetch;
 
@@ -138,7 +138,7 @@ test("GitHub OAuth binds the callback to its state cookie and keeps the access t
     const owner = await getOwnerSession(new Request("https://quant.example", {
       headers: { cookie: `aiw_session=${sessionToken}` },
     }));
-    assert.equal(owner?.id, "174160458");
+    assert.equal(owner?.id, "236086801");
   } finally {
     globalThis.fetch = originalFetch;
     if (originalClientId === undefined) delete process.env.GITHUB_CLIENT_ID;
@@ -151,8 +151,8 @@ test("GitHub OAuth binds the callback to its state cookie and keeps the access t
 test("owner login fallback remains case-insensitive when stable ID is not configured", async () => {
   delete process.env.OWNER_GITHUB_ID;
   const owner = await getOwnerSession(new Request("https://quant.example", {
-    headers: { cookie: await sessionCookie({ id: "999", login: "DaKiEmDarkTharr" }) },
+    headers: { cookie: await sessionCookie({ id: "999", login: "TiEnKhOaA2908" }) },
   }));
   assert.equal(owner?.id, "999");
-  process.env.OWNER_GITHUB_ID = "174160458";
+  process.env.OWNER_GITHUB_ID = "236086801";
 });

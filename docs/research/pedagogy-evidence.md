@@ -1,5 +1,7 @@
 # Bằng chứng sư phạm và phương án bài học cho Finance
 
+> Bản khảo sát lịch sử. Quyết định triển khai và trạng thái hiện hành xem [thiết kế Finance](../finance-rebuild.md). Người học đã yêu cầu triển khai toàn hệ thống, viết gọn và tự nhiên; không còn chờ duyệt pilot.
+
 Ngày khảo sát: 23/11/2026. **Bản nghiên cứu và đề xuất để người học chọn, chưa phải thiết kế đã được duyệt.**
 
 Cập nhật yêu cầu đã được người dùng xác nhận: có toán/Python căn bản nhưng chưa có nền tài chính; hướng chính quant trader/developer và xây hệ thống giao dịch, giữ nền nghiên cứu nghiêm túc. Mọi bài cần giải thích kỹ khái niệm, tính chất và ví dụ, không buộc vào một khuôn trình bày cứng. Việc đưa bài mẫu cụ thể cho người dùng duyệt trước khi biên soạn hàng loạt là **quy trình trợ lý đề xuất**, chưa phải xác nhận riêng của người dùng. Các phương án dưới đây phục vụ quyết định đó.

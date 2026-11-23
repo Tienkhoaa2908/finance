@@ -1,3 +1,3 @@
-import {QuantLab} from '@/components/quant-lab';
-export const metadata={title:'Research lab'};
-export default function Page(){return <QuantLab/>;}
+import {FinanceLab} from '@/components/finance-lab';
+export const metadata={title:'Thực hành'};
+export default function Page(){return <FinanceLab/>;}

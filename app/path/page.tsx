@@ -1,3 +1,3 @@
-import {LearningPath} from '@/components/learning-path';
-export const metadata={title:'Learning path'};
-export default function Page(){return <LearningPath/>;}
+import {FinanceDashboard} from '@/components/finance-dashboard';
+export const metadata={title:'Lộ trình'};
+export default function Page(){return <FinanceDashboard/>;}

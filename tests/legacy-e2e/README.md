@@ -1,0 +1,1 @@
+These inherited UI tests describe the original mathematics navigation. They are preserved as historical/reference coverage and are excluded from the finance Playwright suite. Existing math unit and render audits still run in the build.
