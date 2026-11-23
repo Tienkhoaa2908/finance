@@ -18,8 +18,8 @@ export const research: FinanceLesson[] = [
       "en": "An attractive equity curve does not reveal what was tested or how many alternatives were tried."
     },
     "application": {
-      "vi": "Viết đặc tả chiến lược trước khi lập trình: thông tin, thời điểm lệnh, chi phí và phép đánh giá.",
-      "en": "Write the strategy specification before coding: information, order timing, costs, and evaluation."
+      "vi": "Ví dụ: trước khi kiểm tra tín hiệu mua cổ phiếu sau một tháng tăng giá, nhóm nghiên cứu khóa thời điểm tính tín hiệu sau phiên, lệnh ở phiên kế tiếp và chuẩn nắm giữ. Đặc tả này cho phép kiểm tra lợi nhuận sau phí thay vì lựa chọn quy tắc theo biểu đồ đẹp.",
+      "en": "For example, before testing stock purchases after a rising month, a research team freezes an after-close signal, next-session orders, and a buy-and-hold benchmark. This specification tests after-cost performance without choosing rules from attractive charts."
     },
     "prerequisites": [
       "returns",
@@ -137,8 +137,8 @@ export const research: FinanceLesson[] = [
       "en": "Data bias can manufacture apparent profits even when calculations and code are correct."
     },
     "application": {
-      "vi": "Kiểm tra bảng đặc trưng và sổ thử nghiệm trước khi tin backtest.",
-      "en": "Audit the feature table and experiment ledger before trusting a backtest."
+      "vi": "Ví dụ: bảng đặc trưng cổ phiếu dùng lợi nhuận doanh nghiệp theo thời điểm báo cáo thực sự được công bố, đồng thời giữ cả mã đã hủy niêm yết. Kiểm tra này ngăn mô hình nhận thông tin tương lai và chỉ học từ những tài sản còn tồn tại.",
+      "en": "For example, an equity feature table makes company earnings available only at their actual publication time and retains delisted stocks. This check prevents future information and survivor-only samples from entering the model."
     },
     "prerequisites": [
       "hypothesis",
@@ -261,8 +261,8 @@ export const research: FinanceLesson[] = [
       "en": "Returns must trace back to available data and feasible trades."
     },
     "application": {
-      "vi": "Tạo mô phỏng tối thiểu có thể đối chiếu từng giao dịch bằng tay.",
-      "en": "Create a minimal simulator with trades that can be reconciled by hand."
+      "vi": "Ví dụ: mô phỏng mua cổ phiếu ở phiên sau tín hiệu đóng cửa, rồi lưu riêng yêu cầu đặt lệnh, lần khớp, tiền và số cổ phiếu. Đối chiếu một lượt mua–bán bằng tay trước khi chạy nhiều năm giúp phát hiện tiền hoặc lợi nhuận bị tính sai.",
+      "en": "For example, simulate buying a stock in the session after a closing signal, recording order requests, fills, cash, and shares separately. Reconciling one round trip by hand before a multiyear run reveals cash and profit accounting errors."
     },
     "prerequisites": [
       "pnl",
@@ -380,8 +380,8 @@ export const research: FinanceLesson[] = [
       "en": "A small edge can disappear with frequent or large trades."
     },
     "application": {
-      "vi": "Bổ sung kịch bản chi phí và tìm mức hòa vốn của chiến lược.",
-      "en": "Add cost scenarios and find the strategy’s break-even cost."
+      "vi": "Ví dụ: một chiến lược crypto đổi vị thế thường xuyên có lãi trên giá giữa bid/ask. Chạy lại với giá khớp từ sổ lệnh, phí taker và độ trễ giúp xác định lợi thế có còn sau thực thi hay không.",
+      "en": "For example, a frequently rebalanced crypto strategy looks profitable at bid–ask midpoints. Replaying it with order-book fills, taker fees, and latency checks whether its edge survives execution."
     },
     "prerequisites": [
       "backtest",
@@ -502,8 +502,8 @@ export const research: FinanceLesson[] = [
       "en": "Fitting old data does not establish post-deployment performance."
     },
     "application": {
-      "vi": "Chia theo thời gian, đánh giá cuốn chiếu và giữ một lần kiểm tra cuối.",
-      "en": "Split chronologically, run walk-forward evaluation, and reserve a final test."
+      "vi": "Ví dụ: mô hình dự báo lợi nhuận cổ phiếu được học lại đầu mỗi tháng và chỉ phát dự báo cho tháng kế tiếp. Lưu từng dự báo trước khi thấy kết quả, đồng thời loại nhãn huấn luyện chưa kết thúc, giúp đánh giá đúng quy trình triển khai.",
+      "en": "For example, a stock-return model is retrained at each month start and forecasts only the following month. Saving predictions before outcomes arrive and excluding unfinished training labels evaluates the intended deployment process."
     },
     "prerequisites": [
       "bias",
@@ -621,8 +621,8 @@ export const research: FinanceLesson[] = [
       "en": "Regression is a baseline for relationships, sensitivities, and the value of more complex models."
     },
     "application": {
-      "vi": "Ước lượng độ nhạy lợi nhuận tài sản với thị trường rồi kiểm tra phần dư.",
-      "en": "Estimate asset-return sensitivity to the market and inspect residuals."
+      "vi": "Ví dụ: trước khi coi lợi nhuận một chiến lược cổ phiếu là lợi thế riêng, nhóm nghiên cứu hồi quy nó theo lợi nhuận chỉ số cùng kỳ. Độ dốc và phần dư giúp phân biệt mức tiếp xúc thị trường với phần chưa được mô hình giải thích.",
+      "en": "For example, before treating a stock strategy’s returns as a distinct edge, a research team regresses them on same-period index returns. The slope and residuals separate market exposure from the component the model does not explain."
     },
     "prerequisites": [
       "algebra",
@@ -740,8 +740,8 @@ export const research: FinanceLesson[] = [
       "en": "Market observations are ordered and dependent; independent-sample formulas do not automatically apply."
     },
     "application": {
-      "vi": "Dùng tự hồi quy làm chuẩn dự báo và kiểm tra cấu trúc phần dư.",
-      "en": "Use autoregression as a forecast baseline and inspect residual structure."
+      "vi": "Ví dụ: một bộ dự báo forex dùng lợi nhuận phiên trước để dự báo phiên tới, rồi so sai số với dự báo bằng không trên các phiên sau thời điểm huấn luyện. Kiểm tra phần dư giúp nhận ra cấu trúc thời gian mà mô hình đơn giản chưa nắm bắt.",
+      "en": "For example, a forex forecaster uses the previous session’s return to predict the next, comparing errors with a zero forecast on later sessions. Residual checks reveal temporal structure missed by the simple model."
     },
     "prerequisites": [
       "regression",
@@ -859,8 +859,8 @@ export const research: FinanceLesson[] = [
       "en": "Identical position sizes can carry different risk as volatility changes."
     },
     "application": {
-      "vi": "Dự báo biến động cho giới hạn vị thế, kèm trần đòn bẩy.",
-      "en": "Forecast volatility for position limits with leverage caps."
+      "vi": "Ví dụ: bộ kiểm soát vị thế cập nhật biến động của một cặp crypto sau mỗi nến đã đóng. Khi mức biến động dự báo tăng, quy tắc giảm quy mô lệnh; trần vị thế vẫn được giữ để phòng dự báo quá thấp.",
+      "en": "For example, a position controller updates a crypto pair’s volatility after each completed bar. Rising forecast volatility reduces order size, while a position cap remains in place against underestimation."
     },
     "prerequisites": [
       "risk",
@@ -981,8 +981,8 @@ export const research: FinanceLesson[] = [
       "en": "An optimizer solves the supplied problem; wrong inputs can produce extreme positions."
     },
     "application": {
-      "vi": "Xây danh mục phương sai nhỏ nhất có giới hạn tỷ trọng và so với chia đều.",
-      "en": "Build a constrained minimum-variance portfolio and compare with equal weighting."
+      "vi": "Ví dụ: danh mục cổ phiếu tái cân bằng hàng tuần dùng hiệp phương sai từ dữ liệu quá khứ và giới hạn tỷ trọng từng mã. So tỷ trọng đề xuất với danh mục chia đều, sau phí và làm tròn lô, cho thấy tối ưu có thêm giá trị thực tế hay không.",
+      "en": "For example, a weekly equity portfolio uses covariance estimated from past data and per-stock weight caps. Comparing proposed weights with equal weighting after fees and lot rounding tests whether optimization adds practical value."
     },
     "prerequisites": [
       "algebra",
@@ -1106,8 +1106,8 @@ export const research: FinanceLesson[] = [
       "en": "Flexible models can learn noise and leakage instead of useful relationships."
     },
     "application": {
-      "vi": "Xây mô hình nền và đánh giá riêng dự báo, giao dịch sau phí.",
-      "en": "Build a baseline and separately evaluate forecasts and after-cost trading."
+      "vi": "Ví dụ: mô hình ridge dùng lợi nhuận trễ và biến động để dự báo lợi nhuận cổ phiếu phiên sau. Bộ chuẩn hóa chỉ học từ dữ liệu huấn luyện; dự báo được lưu riêng trước khi chuyển thành lệnh để phân biệt lỗi dự báo với chi phí thực thi.",
+      "en": "For example, ridge uses lagged returns and volatility to forecast a stock’s next-session return. Scaling is fitted only on training data, and forecasts are saved before conversion to orders to separate prediction errors from execution costs."
     },
     "prerequisites": [
       "regression",
@@ -1234,8 +1234,8 @@ export const research: FinanceLesson[] = [
       "en": "Signals become outcomes only through actual fill prices and quantities."
     },
     "application": {
-      "vi": "Mô phỏng lệnh quét nhiều mức giá và nhận ra giới hạn dữ liệu nến.",
-      "en": "Simulate sweeping several price levels and recognize bar-data limitations."
+      "vi": "Ví dụ: lệnh mua crypto lớn hơn lượng bán ở giá ask tốt nhất phải xét các mức giá tiếp theo. Bộ mô phỏng tính giá khớp theo lượng ở từng mức và kiểm tra độ trễ, thay vì mặc định toàn bộ lệnh nhận giá đầu sổ.",
+      "en": "For example, a crypto buy larger than the quantity at the best ask must consider deeper price levels. A simulator computes quantity-weighted fills and checks latency instead of assuming the whole order receives the top-of-book price."
     },
     "prerequisites": [
       "market",
@@ -1352,8 +1352,8 @@ export const research: FinanceLesson[] = [
       "en": "A chart that cannot be regenerated is insufficient for system changes or deployment."
     },
     "application": {
-      "vi": "Đóng gói một lần backtest có đầu vào, sổ giao dịch và báo cáo đối chiếu.",
-      "en": "Package a backtest run with inputs, a trade ledger, and reconciliation."
+      "vi": "Ví dụ: sau khi nhà cung cấp sửa dữ liệu cổ phiếu, kết quả backtest thay đổi dù mã không đổi. So dấu băm dữ liệu, cấu hình và sổ giao dịch của hai lần chạy giúp xác định chênh lệch đến từ dữ liệu, phần mềm hay cách hạch toán.",
+      "en": "For example, a backtest changes after a provider revises stock data even though the code is unchanged. Comparing data hashes, configurations, and trade ledgers across runs identifies whether the difference comes from data, software, or accounting."
     },
     "prerequisites": [
       "validation",
